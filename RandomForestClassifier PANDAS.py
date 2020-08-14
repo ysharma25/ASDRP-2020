@@ -1,33 +1,46 @@
 import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from pandas.plotting import scatter_matrix
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import LabelEncoder
+import numpy as np
+from matplotlib import pyplot
+from sklearn.model_selection import train_test_split
+import sklearn
 
-doc = pd.read_csv("/Users/ember/OneDrive/Desktop/County data without spaces.csv")
-a_names = np.array(doc.pop('Classes Example'))
+doc = pd.read_csv("/Users/ember/OneDrive/Desktop/county data across the US.csv")
+#X and Y Variables
+y_var = doc.pop('FAKE Risk Class')
+x_var = doc.copy()
 
-train, test, train_labels, test_labels = train_test_split(doc, a_names, stratify = a_names, test_size = 0.3, random_state = 50)
 
-train = train.fillna(train.mean())
-test = test.fillna(test.mean())
-tr_attributes = list(train.columns)
+x_train, x_test, y_train, y_test = train_test_split(x_var,y_var, test_size=0.3)
 
-'''train.head(5)
+#This replaces values with the value in the mean
+for i in doc.columns:
+    doc[i] = doc[i].fillna(doc[i].mean())
 
-le = LabelEncoder()
-train['County Name'] = le.fit_transform(train['County Name'].astype('str'))
-test['County Name'] = le.fit_transform(train['County Name'].astype('str'))
+#THIS CHECKS FOR NaN and INFINITE VALUES V
+print(x_train.notnull().values.all())
+print(np.isfinite(x_train).all())
+print(x_train.isnull().values.all())
+print(np.isfinite(x_train).all())
 
-train.head(5)'''
 
-print(train)
-print(test)
-print(train_labels)
-print(tr_attributes)
 
 model = RandomForestClassifier(n_estimators=100,
                                random_state=50,
-                               max_features = 'sqrt')
+                               max_features = 'sqrt',
+                               max_depth = 200)
+#Fit the model onto the data
+model.fit(x_train, y_train)
 
-print(model.fit(train, train_labels))
+#This will tell you which factors affect the number of cases the most
+feature_importance = pd.DataFrame({'Factor' : x_train.columns, 'Effect' : model.feature_importances_})
+feature_importance.sort_values('Effect', ascending=True, inplace=True)
+
+print(feature_importance)
+
+predictions = model.predict(x_test)
+print(predictions)
+print(accuracy_score(y_test, predictions))
+
