@@ -16,20 +16,23 @@ x_var = doc.copy()
 
 x_train, x_test, y_train, y_test = train_test_split(x_var,y_var, test_size=0.3)
 
-#This replaces values with the value in the mean
-#for i in doc.columns:
-    #doc[i] = doc[i].fillna(doc[i].mean())
-
 #THIS CHECKS FOR NaN and INFINITE VALUES V
 '''print(x_train.notnull().values.all())
 print(np.isfinite(x_train).all())
 print(x_train.isnull().values.all())
 print(np.isfinite(x_train).all())'''
 
-#factor1 = doc['No. of Airports']
-#histogram = factor1.hist()
-#pyplot.xlabel('X Variable')
-#pyplot.show()
+factor1 = doc['Number of Cases per 1000 people']
+histogram = factor1.hist()
+pyplot.xlabel('')
+pyplot.ylabel('')
+pyplot.show()
+
+factor2 = doc['Number of liscenced hospital beds per 1000 people']
+histogram = factor2.hist()
+pyplot.xlabel('')
+pyplot.ylabel('')
+pyplot.show()
 
 model = RandomForestClassifier(bootstrap=False, ccp_alpha=0.0, class_weight=None,
                                criterion='gini', max_depth=20, max_features='auto',
