@@ -1,0 +1,22 @@
+
+beds = 6
+employment = 40
+income = 50000
+sum_temp = 70
+wint_temp = 40
+hispanic = 10
+afam = 5
+asian = 50
+poverty = 15
+pets = 20
+facilites = 4
+airports = 0
+insurance = 30
+household = 3.74
+elderly = 45
+youth = 30
+
+#Predict the risk level
+inputs = np.array([beds, employment, income, sum_temp, wint_temp, hispanic, afam, asian,
+                   poverty, pets, facilites, airports, insurance, household, elderly, youth]).reshape(1,-1)
+print('Predicted Risk level: ' + model.predict(inputs))
