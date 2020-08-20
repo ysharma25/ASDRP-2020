@@ -1,4 +1,3 @@
-  
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from pandas.plotting import scatter_matrix
@@ -13,33 +12,29 @@ doc = pd.read_csv("/Users/ember/OneDrive/Desktop/county data-across the US.csv")
 y_var = doc.pop('Risk/Case Class')
 x_var = doc.copy()
 
-
 x_train, x_test, y_train, y_test = train_test_split(x_var,y_var, test_size=0.3)
 
 #THIS CHECKS FOR NaN and INFINITE VALUES V
-'''print(x_train.notnull().values.all())
+print(x_train.notnull().values.all())
 print(np.isfinite(x_train).all())
-print(x_train.isnull().values.all())
-print(np.isfinite(x_train).all())'''
 
-factor1 = doc['Number of Cases per 1000 people']
-histogram = factor1.hist()
-pyplot.xlabel('')
-pyplot.ylabel('')
-pyplot.show()
-
-factor2 = doc['Number of liscenced hospital beds per 1000 people']
-histogram = factor2.hist()
-pyplot.xlabel('')
-pyplot.ylabel('')
+#Building figures
+factor = pd.read_csv("/Users/ember/OneDrive/Desktop/county data-across the US.csv",
+                     usecols=['No. of Airports',	
+                                'Number of People With Health Insurance Per 1000 People',	
+                                'Average Household Size',
+                                'Average Temperature For Winter',	
+                                'Elderly population(65+) in Percent',
+                                'Kids Population (Younger Than 18) as a Percent'])
+scatter_matrix(factor)
 pyplot.show()
 
 model = RandomForestClassifier(bootstrap=False, ccp_alpha=0.0, class_weight=None,
-                               criterion='gini', max_depth=20, max_features='auto',
-                               max_leaf_nodes=101, max_samples=1,
+                               criterion='gini', max_depth=100, max_features='auto',
+                               max_leaf_nodes=50, max_samples=1,
                                min_impurity_decrease=0.0, min_impurity_split=None,
                                min_samples_leaf=1, min_samples_split=2,
-                               min_weight_fraction_leaf=0.0, n_estimators=100,
+                               min_weight_fraction_leaf=0.0, n_estimators=1000,
                                n_jobs=-1, oob_score=False, random_state=50, verbose=0,
                                warm_start=False)
 
@@ -48,11 +43,34 @@ model = RandomForestClassifier(bootstrap=False, ccp_alpha=0.0, class_weight=None
 model.fit(x_train, y_train)
 
 #This will tell you which factors affect the number of cases the most
-#feature_importance = pd.DataFrame({'Factor' : x_train.columns, 'Effect' : model.feature_importances_})
-#feature_importance.sort_values('Effect', ascending=True, inplace=True)
+feature_importance = pd.DataFrame({'Factor' : x_train.columns, 'Effect' : model.feature_importances_})
+feature_importance.sort_values('Effect', ascending=True, inplace=True)
 
-#print(feature_importance)
-
+print(feature_importance)
 predictions = model.predict(x_test)
+
+#This will print the model's predictions and accuracy score
 print(predictions)
 print("Accuracy Score:" + str(accuracy_score(y_test, predictions)))
+
+beds = 6
+employment = 40
+income = 50000
+sum_temp = 70
+wint_temp = 40
+hispanic = 10
+afam = 5
+asian = 50
+poverty = 15
+pets = 20
+facilites = 4
+airports = 0
+insurance = 30
+household = 3.74
+elderly = 45
+youth = 30
+
+#Predict the risk level
+inputs = np.array([beds, employment, income, sum_temp, wint_temp, hispanic, afam, asian,
+                   poverty, pets, facilites, airports, insurance, household, elderly, youth]).reshape(1,-1)
+print('Predicted Risk level: ' + model.predict(inputs))
