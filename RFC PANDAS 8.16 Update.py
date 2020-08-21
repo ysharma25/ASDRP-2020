@@ -7,7 +7,7 @@ from matplotlib import pyplot
 from sklearn.model_selection import train_test_split
 import sklearn
 
-doc = pd.read_csv("/Users/ember/OneDrive/Desktop/county data-across the US.csv")
+doc = pd.read_csv("/Users/ember/OneDrive/Desktop/county data-across the US.csv") # Add filepath of csv file
 #X and Y Variables
 y_var = doc.pop('Risk/Case Class')
 x_var = doc.copy()
@@ -37,6 +37,8 @@ predictions = model.predict(x_test)
 #This will print the model's predictions and accuracy score
 print(predictions)
 print("Accuracy Score:" + str(accuracy_score(y_test, predictions)))
+
+sklearn.metrics.plot_confusion_matrix(model, x_test, y_test)
 
 beds = 6
 employment = 40
