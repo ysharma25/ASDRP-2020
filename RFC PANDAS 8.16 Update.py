@@ -14,21 +14,6 @@ x_var = doc.copy()
 
 x_train, x_test, y_train, y_test = train_test_split(x_var,y_var, test_size=0.3)
 
-#THIS CHECKS FOR NaN and INFINITE VALUES V
-print(x_train.notnull().values.all())
-print(np.isfinite(x_train).all())
-
-#Building figures
-factor = pd.read_csv("/Users/ember/OneDrive/Desktop/county data-across the US.csv",
-                     usecols=['No. of Airports',	
-                                'Number of People With Health Insurance Per 1000 People',	
-                                'Average Household Size',
-                                'Average Temperature For Winter',	
-                                'Elderly population(65+) in Percent',
-                                'Kids Population (Younger Than 18) as a Percent'])
-scatter_matrix(factor)
-pyplot.show()
-
 model = RandomForestClassifier(bootstrap=False, ccp_alpha=0.0, class_weight=None,
                                criterion='gini', max_depth=100, max_features='auto',
                                max_leaf_nodes=50, max_samples=1,
@@ -43,7 +28,7 @@ model = RandomForestClassifier(bootstrap=False, ccp_alpha=0.0, class_weight=None
 model.fit(x_train, y_train)
 
 #This will tell you which factors affect the number of cases the most
-feature_importance = pd.DataFrame({'Factor' : x_train.columns, 'Effect' : model.feature_importances_})
+feature_importance = pd.DataFrame({'Factor' : x_train.columns, 'Feature Importance' : model.feature_importances_})
 feature_importance.sort_values('Effect', ascending=True, inplace=True)
 
 print(feature_importance)
