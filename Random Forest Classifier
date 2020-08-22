@@ -1,3 +1,4 @@
+
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from pandas.plotting import scatter_matrix
@@ -7,7 +8,7 @@ from matplotlib import pyplot
 from sklearn.model_selection import train_test_split
 import sklearn
 
-doc = pd.read_csv("") # Add filepath of csv file
+doc = pd.read_csv("/Users/ember/OneDrive/Desktop/county data-across the US.csv") # Add filepath of csv file
 #X and Y Variables
 y_var = doc.pop('Risk/Case Class')
 x_var = doc.copy()
@@ -34,17 +35,18 @@ model.fit(x_train, y_train)
 
 # Determine which factors affect the number of cases the most
 feature_importance = pd.DataFrame({'Factor' : x_train.columns, 'Feature Importance' : model.feature_importances_})
-feature_importance.sort_values('Effect', ascending=True, inplace=True)
+feature_importance.sort_values('Feature Importance', ascending=True, inplace=True)
 
 print(feature_importance)
 predictions = model.predict(x_test)
 
 #This will print the model's predictions and accuracy score
-print(predictions)
+print("Predictions:" + str(predictions))
 print("Accuracy Score:" + str(accuracy_score(y_test, predictions)))
 
 # Display confusion matrix
 sklearn.metrics.plot_confusion_matrix(model, x_test, y_test)
+pyplot.show()
 
 # Input factors to predict county risk level 
 beds = 6
@@ -67,4 +69,4 @@ youth = 30
 #Predict and display the risk level
 inputs = np.array([beds, employment, income, sum_temp, wint_temp, hispanic, afam, asian,
                    poverty, pets, facilites, airports, insurance, household, elderly, youth]).reshape(1,-1)
-print('Predicted Risk level: ' + model.predict(inputs))
+print('Predicted Risk Level: ' + model.predict(inputs))
