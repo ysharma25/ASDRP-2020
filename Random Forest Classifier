@@ -12,6 +12,10 @@ doc = pd.read_csv("") # Add filepath of csv file
 y_var = doc.pop('Risk/Case Class')
 x_var = doc.copy()
 
+# Replaces values with the value in the mean
+for i in doc.columns:
+    doc[i] = doc[i].fillna(doc[i].mean())
+
 # Splits dataset into testing and training data
 x_train, x_test, y_train, y_test = train_test_split(x_var,y_var, test_size=0.3)
 
@@ -28,7 +32,7 @@ model = RandomForestClassifier(bootstrap=False, ccp_alpha=0.0, class_weight=None
 #Fit the model onto the data
 model.fit(x_train, y_train)
 
-#This will tell you which factors affect the number of cases the most
+# Determine which factors affect the number of cases the most
 feature_importance = pd.DataFrame({'Factor' : x_train.columns, 'Feature Importance' : model.feature_importances_})
 feature_importance.sort_values('Effect', ascending=True, inplace=True)
 
