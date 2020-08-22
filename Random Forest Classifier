@@ -7,11 +7,12 @@ from matplotlib import pyplot
 from sklearn.model_selection import train_test_split
 import sklearn
 
-doc = pd.read_csv("/Users/ember/OneDrive/Desktop/county data-across the US.csv") # Add filepath of csv file
+doc = pd.read_csv("") # Add filepath of csv file
 #X and Y Variables
 y_var = doc.pop('Risk/Case Class')
 x_var = doc.copy()
 
+# Splits dataset into testing and training data
 x_train, x_test, y_train, y_test = train_test_split(x_var,y_var, test_size=0.3)
 
 model = RandomForestClassifier(bootstrap=False, ccp_alpha=0.0, class_weight=None,
@@ -38,8 +39,10 @@ predictions = model.predict(x_test)
 print(predictions)
 print("Accuracy Score:" + str(accuracy_score(y_test, predictions)))
 
+# Display confusion matrix
 sklearn.metrics.plot_confusion_matrix(model, x_test, y_test)
 
+# Input factors to predict county risk level 
 beds = 6
 employment = 40
 income = 50000
@@ -57,7 +60,7 @@ household = 3.74
 elderly = 45
 youth = 30
 
-#Predict the risk level
+#Predict and display the risk level
 inputs = np.array([beds, employment, income, sum_temp, wint_temp, hispanic, afam, asian,
                    poverty, pets, facilites, airports, insurance, household, elderly, youth]).reshape(1,-1)
 print('Predicted Risk level: ' + model.predict(inputs))
